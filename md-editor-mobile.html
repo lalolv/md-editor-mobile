@@ -1,0 +1,83 @@
+<dom-module id="md-editor-mobile">
+    <style>
+        :host {
+            display: block;
+        }
+        .mobile-body {
+            width: 270px;
+            height: 480px;
+            background-color: #FFFFFF;
+            margin-top: 10px;
+            overflow: auto;
+            word-wrap: break-word;
+            word-break: normal;
+            line-height: inherit;
+        }
+        .mobile-border {
+            width: 280px;
+            height: 560px;
+            margin: 10px;
+            background-color: #000000;
+            border-radius: 8px;
+        }
+        .mobile-header {
+            margin-top: 5px;
+        }
+        .mobile-home {
+            width: 30px;
+            height: 30px;
+            background-color: #4a4a4a;
+            margin-top: 8px;
+            border-radius: 16px;
+        }
+        #h5 {
+            margin-top: -15px;
+            margin-bottom: -15px;
+            margin-left: 5px;
+            margin-right: 5px;
+        }
+    </style>
+    <template>
+        <div class="flex horizontal layout">
+            <!-- Editor rows="20" max-rows="30" -->
+            <iron-autogrow-textarea id="md" class="flex" max-rows="20" bind-value="[[mdCode]]"
+                on-bind-value-changed="change">
+            </iron-autogrow-textarea>
+            <!-- Mobile preview -->
+            <div class="mobile-border vertical layout">
+                <div class="mobile-header self-center">
+                    <hr width="50px" style="boder-color:#b5b5b5">
+                </div>
+                <div class="horizontal layout center-justified">
+                    <div class="mobile-body">
+                        <!-- Mobile content -->
+                        <div id="h5"></div>
+                    </div>
+                </div>
+                <div class="mobile-home self-center"></div>
+            </div>
+        </div>
+    </template>
+</dom-module>
+
+<script>
+    Polymer({
+        is: "md-editor-mobile",
+        properties: {
+            mdCode: {
+                type: String,
+                observer: '_parse'
+            },
+            h5Code: {
+                type: String
+            }
+        },
+        change: function(e, detail) {
+            this.mdCode = detail.value;
+        },
+        _parse: function() {
+            this.h5Code = marked(this.mdCode);
+            this.$.h5.innerHTML = this.h5Code;
+        }
+    });
+</script>
