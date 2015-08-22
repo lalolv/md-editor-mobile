@@ -13,7 +13,19 @@
     </head>
     <body>
 
-        <md-editor-mobile md-code="## 标题1"></md-editor-mobile>
+        <md-editor-mobile id="mde" md-code="## 标题1"></md-editor-mobile>
+
+        <input type="button" value="aButton" name="myButton" onClick="showmsg()">
 
     </body>
+
+    <script type="text/javascript">
+        function showmsg() {
+            var m = Polymer.dom(this.root).querySelector('#mde');
+            // console.log(m.mdCode);
+            // console.log(m.cursorPosition());
+            m.insertAfterCursor("x");
+        }
+    </script>
+
 </html>
