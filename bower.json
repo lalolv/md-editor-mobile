@@ -5,6 +5,6 @@
   "homepage": "https://lalo.im",
   "dependencies": {
     "polymer": "Polymer/polymer",
-    "iron-elements": "PolymerElements/iron-elements",
+    "iron-elements": "PolymerElements/iron-elements"
   }
 }
