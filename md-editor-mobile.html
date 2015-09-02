@@ -36,6 +36,10 @@
             margin-left: 5px;
             margin-right: 5px;
         }
+        #h5 img {
+            height: auto;
+            max-width: 100%;
+        }
     </style>
     <template>
         <div class="flex horizontal layout">
@@ -78,6 +82,12 @@
         _parse: function() {
             this.h5Code = marked(this.mdCode);
             this.$.h5.innerHTML = this.h5Code;
+            // 设置图片的宽度
+            var imgs = this.$.h5.querySelectorAll('img');
+            for (var i = 0; i < imgs.length; i++) {
+                imgs[i].style.maxWidth = '100%';
+                imgs[i].style.height = 'auto';
+            }
         },
         cursorPosition: function() {
             var tx = this.$.md.textarea;

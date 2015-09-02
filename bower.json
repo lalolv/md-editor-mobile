@@ -1,11 +1,10 @@
 {
   "name": "md-editor-mobile",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "license": "MIT",
   "homepage": "https://lalo.im",
   "dependencies": {
     "polymer": "Polymer/polymer",
     "iron-elements": "PolymerElements/iron-elements",
-    "paper-dialog-scrollable": "PolymerElements/paper-dialog-scrollable"
   }
 }
