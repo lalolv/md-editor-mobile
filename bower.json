@@ -1,6 +1,16 @@
 {
   "name": "md-editor-mobile",
   "version": "0.1.0",
+  "authors": "Lalo",
+  "keywords": [
+    "markdown",
+    "editor",
+    "polymer",
+  ],
+  "main": [
+    "md-editor-mobile.html"
+  ],
+  "ignore": [],
   "license": "MIT",
   "homepage": "https://lalo.im",
   "dependencies": {
