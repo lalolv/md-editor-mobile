@@ -5,7 +5,7 @@
   "keywords": [
     "markdown",
     "editor",
-    "polymer",
+    "polymer"
   ],
   "main": [
     "md-editor-mobile.html"
