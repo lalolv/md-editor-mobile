@@ -1,108 +1,158 @@
 <dom-module id="md-editor-mobile">
-    <style>
-        :host {
-            display: block;
-        }
-        .mobile-body {
-            width: 270px;
-            height: 480px;
-            background-color: #FFFFFF;
-            margin-top: 15px;
-            overflow: auto;
-            word-wrap: break-word;
-            word-break: normal;
-            line-height: inherit;
-        }
-        .mobile-border {
-            width: 280px;
-            height: 600px;
-            margin: 10px;
-            background-color: #333333;
-            border-radius: 24px;
-        }
-        .mobile-header {
-            margin-top: 15px;
-        }
-        .mobile-home {
-            width: 50px;
-            height: 50px;
-            background-color: #4a4a4a;
-            margin-top: 10px;
-            border-radius: 25px;
-        }
-        #h5 {
-            margin-top: -15px;
-            margin-bottom: -15px;
-            margin-left: 5px;
-            margin-right: 5px;
-        }
-        #h5 img {
-            height: auto;
-            max-width: 100%;
-        }
-    </style>
-    <template>
-        <div class="flex horizontal layout">
-            <!-- Editor -->
-            <iron-autogrow-textarea id="md" class="flex" max-rows="10" bind-value="[[mdCode]]"
-                on-bind-value-changed="_change">
-            </iron-autogrow-textarea>
-            <!-- Mobile preview -->
-            <div class="mobile-border vertical layout">
-                <div class="mobile-header self-center">
-                    <hr width="50px" style="boder-color:#b5b5b5">
-                </div>
-                <div class="horizontal layout center-justified">
-                    <div class="mobile-body">
-                        <!-- Mobile content -->
-                        <div id="h5"></div>
-                    </div>
-                </div>
-                <div class="mobile-home self-center"></div>
-            </div>
+  <style>
+    :host {
+      display: block;
+    }
+    .mobile-body {
+      width: 270px;
+      height: 480px;
+      background-color: #FFFFFF;
+      margin-top: 15px;
+      overflow: auto;
+      word-wrap: break-word;
+      word-break: normal;
+      line-height: inherit;
+    }
+    .mobile-border {
+      width: 280px;
+      height: 600px;
+      margin: 10px;
+      background-color: #333333;
+      border-radius: 24px;
+    }
+    .mobile-header {
+      margin-top: 15px;
+    }
+    .mobile-home {
+      width: 50px;
+      height: 50px;
+      background-color: #4a4a4a;
+      margin-top: 10px;
+      border-radius: 25px;
+    }
+    #h5 {
+      margin-top: -15px;
+      margin-bottom: -15px;
+      margin-left: 5px;
+      margin-right: 5px;
+    }
+    .toolbar {
+      background-color: #e8e8e8;
+    }
+  </style>
+  <template>
+    <div class="flex horizontal layout">
+      <div class="vertical layout">
+        <!-- Toolbar -->
+        <div class="horizontal layout toolbar center">
+          <paper-menu-button>
+            <paper-icon-button icon="subject" class="dropdown-trigger"></paper-icon-button>
+            <paper-menu class="dropdown-content" on-click="hClick">
+              <paper-item data="h2">标题2</paper-item>
+              <paper-item data="h3">标题3</paper-item>
+              <paper-item data="h4">标题4</paper-item>
+            </paper-menu>
+          </paper-menu-button>
+          <div>
+            <paper-icon-button icon="icons:list" on-click="ulClick"></paper-icon-button>
+            <paper-tooltip>项目列表</paper-tooltip>
+          </div>
+          <div class="">
+            <paper-icon-button icon="icons:file-upload" on-click="uploadClick"></paper-icon-button>
+            <paper-tooltip>上传</paper-tooltip>
+          </div>
         </div>
-    </template>
+        <!-- Editor -->
+        <iron-autogrow-textarea id="md"
+          class="flex" max-rows="10"
+          bind-value="[[mdCode]]"
+          on-bind-value-changed="_change" on-paste="onPaste">
+        </iron-autogrow-textarea>
+      </div>
+      <!-- Mobile preview -->
+      <div class="mobile-border vertical layout">
+        <div class="mobile-header self-center">
+          <hr width="50px" style="boder-color:#b5b5b5">
+        </div>
+        <div class="horizontal layout center-justified">
+          <div class="mobile-body">
+            <!-- Mobile content -->
+            <div id="h5"></div>
+          </div>
+        </div>
+        <div class="mobile-home self-center"></div>
+      </div>
+    </div>
+  </template>
 </dom-module>
 
 <script>
-    Polymer({
-        is: "md-editor-mobile",
-        properties: {
-            mdCode: {
-                type: String,
-                observer: '_parse'
-            },
-            h5Code: {
-                type: String
-            }
-        },
-        _change: function(e, detail) {
-            this.mdCode = detail.value;
-        },
-        _parse: function() {
-            this.h5Code = marked(this.mdCode);
-            this.$.h5.innerHTML = this.h5Code;
-            // 设置图片的宽度
-            var imgs = this.$.h5.querySelectorAll('img');
-            for (var i = 0; i < imgs.length; i++) {
-                imgs[i].style.maxWidth = '100%';
-                imgs[i].style.height = 'auto';
-            }
-        },
-        cursorPosition: function() {
-            var tx = this.$.md.textarea;
-            var start = tx.selectionStart;
-            var end = tx.selectionEnd;
-            return {"start": start, "end": end};
-        },
-        // 在光标后插入内容
-        insertAfterCursor: function(txt) {
-            var i = this.$.md.textarea.selectionEnd;
-            var s1 = this.mdCode.substring(0, i);
-            var s2 = this.mdCode.substring(i);
-            // console.log(s1);
-            // console.log(s2);
-            this.mdCode = s1 + txt + s2;
-        }
-    });
+  Polymer({
+    is: "md-editor-mobile",
+    properties: {
+      mdCode: {
+        type: String,
+        observer: '_parse'
+      },
+      h5Code: {
+        type: String
+      }
+    },
+    _change: function(e, detail) {
+      this.mdCode = detail.value;
+    },
+    onPaste: function(e, detail) {
+      if (e.clipboardData.getData('text/html') != "") {
+        console.log("HTML");
+        // console.log(e.clipboardData.getData(types[i]));
+        // this.insertAfterCursor("Hello");
+        e.preventDefault();
+        return false;
+      } else {
+        return true;
+      }
+    },
+    _parse: function() {
+      this.h5Code = marked(this.mdCode);
+      this.$.h5.innerHTML = this.h5Code;
+      // 设置图片的宽度
+      var imgs = this.$.h5.querySelectorAll('img');
+      for (var i = 0; i < imgs.length; i++) {
+        imgs[i].style.maxWidth = '100%';
+        imgs[i].style.height = 'auto';
+      }
+    },
+    cursorPosition: function() {
+      var tx = this.$.md.textarea;
+      var start = tx.selectionStart;
+      var end = tx.selectionEnd;
+      return {"start": start, "end": end};
+    },
+    // 在光标后插入内容
+    insertAfterCursor: function(txt) {
+      var i = this.$.md.textarea.selectionEnd;
+      var s1 = this.mdCode.substring(0, i);
+      var s2 = this.mdCode.substring(i);
+      this.mdCode = s1 + txt + s2;
+    },
+    uploadClick: function(e, detail) {
+      this.fire("upload");
+    },
+    hClick: function(e, detail) {
+      switch(e.target.getAttribute("data")) {
+        case "h2":
+          this.insertAfterCursor("\n## 标题2");
+          break;
+        case "h3":
+          this.insertAfterCursor("\n### 标题3");
+          break;
+        case "h4":
+          this.insertAfterCursor("\n#### 标题4");
+          break;
+      }
+    },
+    ulClick: function(e, detail) {
+      this.insertAfterCursor("\n* 列表项");
+    }
+  });
 </script>
