@@ -45,6 +45,7 @@
       <div class="vertical layout">
         <!-- Toolbar -->
         <div class="horizontal layout toolbar center">
+          <!-- 标题 -->
           <paper-menu-button>
             <paper-icon-button icon="subject" class="dropdown-trigger"></paper-icon-button>
             <paper-menu class="dropdown-content" on-click="hClick">
@@ -53,14 +54,28 @@
               <paper-item data="h4">标题4</paper-item>
             </paper-menu>
           </paper-menu-button>
+          <!-- 字体 -->
+          <paper-menu-button>
+            <paper-icon-button icon="icons:font-download" class="dropdown-trigger"></paper-icon-button>
+            <paper-menu class="dropdown-content" on-click="fontClick">
+              <paper-item data="bold">粗体</paper-item>
+              <paper-item data="italic">斜体</paper-item>
+              <!-- <paper-item data="color">颜色</paper-item> -->
+            </paper-menu>
+          </paper-menu-button>
+          <!-- 列表 -->
           <div>
             <paper-icon-button icon="icons:list" on-click="ulClick"></paper-icon-button>
             <paper-tooltip>项目列表</paper-tooltip>
           </div>
-          <div class="">
-            <paper-icon-button icon="icons:file-upload" on-click="uploadClick"></paper-icon-button>
-            <paper-tooltip>上传</paper-tooltip>
-          </div>
+          <!-- 图片上传、选择 -->
+          <paper-menu-button>
+            <paper-icon-button icon="icons:file-upload" class="dropdown-trigger"></paper-icon-button>
+            <paper-menu class="dropdown-content" on-click="fileClick">
+              <paper-item data="up">上传</paper-item>
+              <paper-item data="gl">图库</paper-item>
+            </paper-menu>
+          </paper-menu-button>
         </div>
         <!-- Editor -->
         <iron-autogrow-textarea id="md"
@@ -92,10 +107,12 @@
     properties: {
       mdCode: {
         type: String,
-        observer: '_parse'
+        observer: '_parse',
+        value: ""
       },
       h5Code: {
-        type: String
+        type: String,
+        value: ""
       }
     },
     _change: function(e, detail) {
@@ -103,7 +120,7 @@
     },
     onPaste: function(e, detail) {
       if (e.clipboardData.getData('text/html') != "") {
-        console.log("HTML");
+        // console.log("HTML");
         // console.log(e.clipboardData.getData(types[i]));
         // this.insertAfterCursor("Hello");
         e.preventDefault();
@@ -135,9 +152,6 @@
       var s2 = this.mdCode.substring(i);
       this.mdCode = s1 + txt + s2;
     },
-    uploadClick: function(e, detail) {
-      this.fire("upload");
-    },
     hClick: function(e, detail) {
       switch(e.target.getAttribute("data")) {
         case "h2":
@@ -148,6 +162,29 @@
           break;
         case "h4":
           this.insertAfterCursor("\n#### 标题4");
+          break;
+      }
+    },
+    fontClick: function(e, detail) {
+      switch(e.target.getAttribute("data")) {
+        case "bold":
+          this.insertAfterCursor("\n**文字**");
+          break;
+        case "italic":
+          this.insertAfterCursor("\n_文字_");
+          break;
+        case "color":
+          this.insertAfterCursor("\n<font color='#CCCCCC'>标题4</font>");
+          break;
+      }
+    },
+    fileClick: function(e, detail) {
+      switch(e.target.getAttribute("data")) {
+        case "up":
+          this.fire("upload");
+          break;
+        case "gl":
+          this.fire("gallery");
           break;
       }
     },
